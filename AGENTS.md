@@ -46,12 +46,12 @@ The test: Every changed line should trace directly to the user's request.
 
 **Define success criteria. Loop until verified.**
 
-Transform tasks into verifiable goals using `bash`:
+Transform tasks into verifiable goals using `shell`:
 - "Add validation" -> "Write tests for invalid inputs, run them to see them fail, implement, then run them to see them pass"
 - "Fix the bug" -> "Write a test/script that reproduces it, then make it pass"
 - "Refactor X" -> "Run existing tests before and after"
 
-For multi-step tasks, use `todowrite` or state a brief plan:
+For multi-step tasks, state a brief plan:
 1. [Step] -> verify: [check command]
 2. [Step] -> verify: [check command]
 3. [Step] -> verify: [check command]

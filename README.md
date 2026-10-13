@@ -37,6 +37,8 @@ Four principles that directly address these issues:
 
 There are two levels of installation. **Global** makes the guidelines available in every project. **Project** scopes them to a single repository. Do both if you want the guidelines everywhere with per-project overrides.
 
+OpenCode 2.0 reads `AGENTS.md` on its own. An `instructions` entry in `opencode.json` does not load files.
+
 ### Global Install
 
 The skill is auto-discovered by OpenCode from two locations. Pick one:
@@ -55,20 +57,15 @@ curl -o ~/.agents/skills/karpathy-guidelines/SKILL.md \
   https://raw.githubusercontent.com/chius-me/andrej-karpathy-skills-opencode/main/.opencode/skills/karpathy-guidelines/SKILL.md
 ```
 
-To also load the guidelines as default system instructions in every project, add to `~/.config/opencode/opencode.json`:
-
-```json
-{
-  "instructions": ["~/AGENTS.md"]
-}
-```
-
-Then copy the instructions file:
+To also load the guidelines as default instructions in every project, copy them to the global instructions file:
 
 ```bash
-curl -o ~/AGENTS.md \
+mkdir -p ~/.config/opencode
+curl -o ~/.config/opencode/AGENTS.md \
   https://raw.githubusercontent.com/chius-me/andrej-karpathy-skills-opencode/main/AGENTS.md
 ```
+
+If `~/.config/opencode/AGENTS.md` already exists, append this file to it.
 
 ### Project Install
 
@@ -82,27 +79,18 @@ mkdir -p .opencode/skills/karpathy-guidelines
 curl -o .opencode/skills/karpathy-guidelines/SKILL.md \
   https://raw.githubusercontent.com/chius-me/andrej-karpathy-skills-opencode/main/.opencode/skills/karpathy-guidelines/SKILL.md
 
-# 2. Install the instructions (auto-loaded by OpenCode from project root)
+# 2. Install the instructions (auto-loaded from the project root)
 curl -o AGENTS.md \
   https://raw.githubusercontent.com/chius-me/andrej-karpathy-skills-opencode/main/AGENTS.md
 ```
 
-If you already have an `AGENTS.md` or prefer to use `opencode.json`, add the instructions path explicitly:
-
-```json
-{
-  "instructions": ["AGENTS.md"]
-}
-```
+If the project already has an `AGENTS.md`, merge these guidelines into that file. OpenCode also loads any `AGENTS.md` between the current directory and the project root, and combines them as written.
 
 ### Verify
 
-OpenCode will log something like the following on startup:
+`AGENTS.md` is applied when a session starts. OpenCode does not print a startup line for it.
 
-```
-Loaded skill: karpathy-guidelines
-Loaded instructions from AGENTS.md
-```
+The skill is listed by its description. Mention `@karpathy-guidelines` in a prompt to load the full text.
 
 ## How to Know It's Working
 
@@ -115,7 +103,7 @@ These guidelines are working if you see:
 
 ## Customization
 
-Merge with project-specific instructions by editing `AGENTS.md` or adding rules to your project's `opencode.json`:
+Merge project-specific instructions into `AGENTS.md`:
 
 ```markdown
 ## Project-Specific Guidelines

@@ -37,6 +37,8 @@
 
 安装分两个层次。**全局安装**让指南在每个项目中生效。**项目安装**将指南限定在单个仓库中。可以两者都做，让全局指南生效的同时在特定项目中覆盖。
 
+OpenCode 2.0 会直接读取 `AGENTS.md`。`opencode.json` 里的 `instructions` 不会加载文件。
+
 ### 全局安装
 
 OpenCode 会自动从以下两个位置发现技能，任选其一：
@@ -55,20 +57,15 @@ curl -o ~/.agents/skills/karpathy-guidelines/SKILL.md \
   https://raw.githubusercontent.com/chius-me/andrej-karpathy-skills-opencode/main/.opencode/skills/karpathy-guidelines/SKILL.md
 ```
 
-如果想在每个项目中默认加载指南作为系统指令，在 `~/.config/opencode/opencode.json` 中添加：
-
-```json
-{
-  "instructions": ["~/AGENTS.md"]
-}
-```
-
-然后复制指令文件：
+如果想在每个项目中默认加载指南，把它复制到全局指令文件：
 
 ```bash
-curl -o ~/AGENTS.md \
+mkdir -p ~/.config/opencode
+curl -o ~/.config/opencode/AGENTS.md \
   https://raw.githubusercontent.com/chius-me/andrej-karpathy-skills-opencode/main/AGENTS.md
 ```
+
+如果 `~/.config/opencode/AGENTS.md` 已经存在，把这份内容追加进去。
 
 ### 项目安装
 
@@ -82,27 +79,18 @@ mkdir -p .opencode/skills/karpathy-guidelines
 curl -o .opencode/skills/karpathy-guidelines/SKILL.md \
   https://raw.githubusercontent.com/chius-me/andrej-karpathy-skills-opencode/main/.opencode/skills/karpathy-guidelines/SKILL.md
 
-# 2. 安装指令（OpenCode 从项目根目录自动加载）
+# 2. 安装指令（从项目根目录自动加载）
 curl -o AGENTS.md \
   https://raw.githubusercontent.com/chius-me/andrej-karpathy-skills-opencode/main/AGENTS.md
 ```
 
-如果你的项目已有 `AGENTS.md`，或更倾向于使用 `opencode.json`，可显式配置指令路径：
-
-```json
-{
-  "instructions": ["AGENTS.md"]
-}
-```
+如果项目里已经有 `AGENTS.md`，把这些指南合并进该文件。当前目录到项目根之间的每一层 `AGENTS.md` 也会被加载，并按原文合并。
 
 ### 验证安装
 
-OpenCode 启动时会输出类似以下日志：
+`AGENTS.md` 在会话开始时生效。OpenCode 不会为此打印启动日志。
 
-```
-Loaded skill: karpathy-guidelines
-Loaded instructions from AGENTS.md
-```
+技能会按 description 出现在可用列表里。在提示里写 `@karpathy-guidelines` 即可加载全文。
 
 ## 如何判断它在起作用
 
@@ -115,7 +103,7 @@ Loaded instructions from AGENTS.md
 
 ## 定制
 
-编辑 `AGENTS.md` 或在项目的 `opencode.json` 中添加规则，与项目特定指令合并：
+把项目特定指令合并进 `AGENTS.md`：
 
 ```markdown
 ## 项目特定指南
